@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://TU-DOMINIO/sitemap.xml
+Sitemap: https://rgarcia-desarrolloweb.github.io/melgalli-website/sitemap.xml
