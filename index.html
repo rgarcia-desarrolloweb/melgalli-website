@@ -109,7 +109,7 @@
   .quote-serif{ font-family:'Fraunces', serif; font-optical-sizing:auto; }
 
   .wrap{ max-width:1120px; margin:0 auto; padding:0 32px; }
-  a:focus-visible, button:focus-visible{ outline:2px solid var(--rosa); outline-offset:3px; }
+  a:focus-visible, button:focus-visible, summary:focus-visible{ outline:2px solid var(--rosa); outline-offset:3px; }
 
   /* ---------- NAV ---------- */
   .nav{
@@ -123,9 +123,34 @@
     padding:17px 32px; max-width:1120px; margin:0 auto;
   }
   .nav-logo{ font-size:21px; color:var(--rosa); }
-  .nav-links{ display:flex; gap:32px; list-style:none; font-size:14.5px; }
+  .nav-links{ display:flex; align-items:center; gap:32px; list-style:none; font-size:14.5px; }
   .nav-links a{ text-decoration:none; color:var(--blush); opacity:0.8; transition:opacity .2s ease; }
   .nav-links a:hover{ opacity:1; }
+  .nav-dropdown{ position:relative; }
+  .nav-dropdown summary{
+    display:flex; align-items:center; gap:6px; color:var(--blush); opacity:0.8;
+    cursor:pointer; list-style:none; transition:opacity .2s ease;
+  }
+  .nav-dropdown summary::-webkit-details-marker{ display:none; }
+  .nav-dropdown summary::after{
+    content:""; width:6px; height:6px; border-right:1.5px solid currentColor;
+    border-bottom:1.5px solid currentColor; transform:translateY(-2px) rotate(45deg);
+    transition:transform .2s ease;
+  }
+  .nav-dropdown summary:hover, .nav-dropdown[open] summary{ opacity:1; }
+  .nav-dropdown[open] summary::after{ transform:translateY(2px) rotate(225deg); }
+  .nav-dropdown-menu{
+    position:absolute; top:calc(100% + 16px); right:0; width:230px; list-style:none;
+    background:var(--bordo-deep); border:1px solid var(--line-on-bordo);
+    border-radius:8px; padding:8px; box-shadow:0 14px 30px rgba(45,20,24,0.24);
+  }
+  .nav-dropdown-menu::before{
+    content:""; position:absolute; left:0; right:0; bottom:100%; height:17px;
+  }
+  .nav-dropdown-menu a{
+    display:block; padding:11px 12px; border-radius:6px; line-height:1.35;
+  }
+  .nav-dropdown-menu a:hover{ background:rgba(251,240,236,0.08); }
   .nav-cta{
     display:inline-flex; align-items:center; justify-content:center; text-align:center;
     font-size:14px; padding:11px 22px; border-radius:8px; line-height:1.2;
@@ -163,6 +188,22 @@
   }
   .mobile-menu a:not(.nav-cta):last-of-type{ border-bottom:none; }
   .mobile-menu .nav-cta{ margin-top:18px; }
+  .mobile-nav-dropdown summary{
+    display:flex; align-items:center; justify-content:space-between; color:var(--blush);
+    font-size:15.5px; padding:13px 0; border-bottom:1px solid var(--line-on-bordo);
+    opacity:0.9; cursor:pointer; list-style:none;
+  }
+  .mobile-nav-dropdown summary::-webkit-details-marker{ display:none; }
+  .mobile-nav-dropdown summary::after{
+    content:""; width:7px; height:7px; margin-right:3px;
+    border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+    transform:translateY(-2px) rotate(45deg); transition:transform .2s ease;
+  }
+  .mobile-nav-dropdown[open] summary::after{ transform:translateY(2px) rotate(225deg); }
+  .mobile-nav-dropdown-links{ display:flex; flex-direction:column; padding-left:16px; }
+  .mobile-menu .mobile-nav-dropdown-links a:not(.nav-cta){
+    font-size:14.5px; padding:12px 0; color:var(--rosa);
+  }
   @media (min-width:801px){ .mobile-menu{ display:none !important; } }
 
   /* Ancla de secciones: compensa la altura del nav sticky al llegar por URL con #hash */
@@ -667,7 +708,15 @@
       <li><a href="#academy">academy</a></li>
       <li><a href="#ebooks">ebooks</a></li>
       <li><a href="#contenido">contenido</a></li>
-      <li><a href="#calculadora">calculadora</a></li>
+      <li>
+        <details class="nav-dropdown" id="calculatorsMenu">
+          <summary>calculadoras</summary>
+          <ul class="nav-dropdown-menu">
+            <li><a href="#calculadora">Precio de venta</a></li>
+            <li><a href="#calc-roi">Retorno de marketing</a></li>
+          </ul>
+        </details>
+      </li>
     </ul>
     <!-- TODO(dev): reemplazar por el link de reserva de Google Calendar (Appointment Schedule) -->
     <a class="nav-cta nav-mobile-hide" href="https://melgalli.youcanbook.me/" target="_blank" rel="noopener">Agendar consultoría</a>
@@ -681,7 +730,13 @@
     <a href="#academy">academy</a>
     <a href="#ebooks">ebooks</a>
     <a href="#contenido">contenido</a>
-    <a href="#calculadora">calculadora</a>
+    <details class="mobile-nav-dropdown">
+      <summary>calculadoras</summary>
+      <div class="mobile-nav-dropdown-links">
+        <a href="#calculadora">Precio de venta</a>
+        <a href="#calc-roi">Retorno de marketing</a>
+      </div>
+    </details>
     <!-- TODO(dev): mismo link de Google Calendar que arriba -->
     <a class="nav-cta" href="https://melgalli.youcanbook.me/" target="_blank" rel="noopener">Agendar consultoría</a>
   </div>
@@ -1140,6 +1195,7 @@
 
     function closeMenu(){
       menu.classList.remove('open');
+      menu.querySelectorAll('details[open]').forEach(function(details){ details.removeAttribute('open'); });
       burger.setAttribute('aria-expanded', 'false');
       burger.setAttribute('aria-label', 'Abrir menú');
     }
@@ -1157,6 +1213,26 @@
     });
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape') closeMenu();
+    });
+  })();
+</script>
+
+<script>
+  (function(){
+    var dropdown = document.getElementById('calculatorsMenu');
+    if (!dropdown) return;
+
+    dropdown.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', function(){ dropdown.removeAttribute('open'); });
+    });
+    document.addEventListener('click', function(e){
+      if (!dropdown.contains(e.target)) dropdown.removeAttribute('open');
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && dropdown.open){
+        dropdown.removeAttribute('open');
+        dropdown.querySelector('summary').focus();
+      }
     });
   })();
 </script>
