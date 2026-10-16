@@ -538,7 +538,7 @@
   }
 
   /* ---------- CALCULADORA: blindaje de ancho para Safari/iOS ---------- */
-  .calc-section{ overflow-x:hidden; }
+  .calc-section{ overflow-x:clip; }
   .calc-grid, .calc-grid > *, .calc-form, .calc-result, .calc-field, .calc-input-row{ min-width:0; max-width:100%; }
   .calc-input-row input{
     width:100%; min-width:0; -webkit-appearance:none; appearance:none; border-radius:0;
@@ -547,6 +547,113 @@
   .calc-breakdown-row span:last-child{ text-align:right; white-space:nowrap; }
   .calc-breakdown-row span:first-child{ min-width:0; }
   .calc-result-price{ overflow-wrap:anywhere; }
+
+  /* ---------- CALCULADORA DE RETORNO (ROI) ---------- */
+.mg-roi{
+  --bordo:#7A3B44; --bordo-deep:#632F37; --rosa:#F3B8C4; --crema:#F0DDBF;
+  --crema-soft:#F7ECD9; --blush:#FBF0EC; --marron:#5C4636;
+  --line-on-crema:rgba(92,70,54,.16); --line-on-bordo:rgba(243,184,196,.24);
+  --radius-md:8px; --radius-lg:12px;
+  --mg-roi-top:100px;
+  background:var(--crema);color:var(--marron);
+  padding:40px 32px 104px;
+  font:400 17px/1.7 Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.mg-roi *,.mg-roi *::before,.mg-roi *::after{box-sizing:border-box;margin:0;padding:0}
+.mg-roi p,.mg-roi label,.mg-roi input,.mg-roi button,.mg-roi li,.mg-roi dt,.mg-roi dd,.mg-roi small,.mg-roi a,.mg-roi span,.mg-roi b{font-family:Inter,system-ui,sans-serif}
+.mg-roi h2,.mg-roi .big{font-family:"Baloo 2",system-ui,sans-serif!important}
+.mg-roi .verdict,.mg-roi .optional,.mg-roi .sign{font-family:Fraunces,Georgia,serif!important;font-style:italic}
+.mg-roi [hidden]{display:none!important}
+.mg-roi .mg-roi-in{max-width:1000px;margin:0 auto}
+@media (max-width:600px){.mg-roi{padding:24px 20px 72px}}
+
+/* Encabezado de la segunda calculadora */
+.mg-roi .head{max-width:680px;margin-bottom:48px}
+.mg-roi .eyebrow{font-size:13.5px;line-height:1.3;font-weight:600;color:var(--bordo)}
+.mg-roi h2{font-weight:700;font-size:clamp(28px,4vw,42px);line-height:1.16;color:var(--bordo-deep)}
+.mg-roi .head p.lead{margin-top:16px}
+
+.mg-roi .grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:860px){.mg-roi .grid{grid-template-columns:1fr}}
+
+/* Tarjeta de datos */
+.mg-roi .form{background:var(--crema-soft);border:1px solid var(--line-on-crema);border-radius:var(--radius-lg);padding:32px}
+@media (max-width:600px){.mg-roi .form{padding:24px 20px}}
+.mg-roi .group + .group{border-top:1px solid var(--line-on-crema);margin-top:28px;padding-top:28px}
+.mg-roi .group-title{font-size:13.5px;line-height:1.3;font-weight:600;color:var(--bordo)}
+.mg-roi .group-sub{font-size:14px;line-height:1.5;margin-top:4px;opacity:.85}
+.mg-roi .group-title + .chips,.mg-roi .group-sub + .fields,.mg-roi .group-title + .fields{margin-top:18px}
+.mg-roi .group-sub + .fields{margin-top:18px}
+
+.mg-roi .chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+@media (max-width:480px){.mg-roi .chips{grid-template-columns:1fr}}
+.mg-roi .chip{font:inherit;font-size:15px;font-weight:600;line-height:1.35;text-align:left;padding:13px 16px;border-radius:var(--radius-md);border:1px solid var(--line-on-crema);background:var(--blush);color:var(--bordo-deep);cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.mg-roi .chip small{display:block;font-weight:400;font-size:13px;margin-top:2px;color:var(--marron);opacity:.8}
+.mg-roi .chip:hover{border-color:var(--bordo)}
+.mg-roi .chip[aria-pressed="true"]{background:var(--bordo);border-color:var(--bordo);color:var(--blush)}
+.mg-roi .chip[aria-pressed="true"] small{color:var(--rosa);opacity:1}
+.mg-roi .chip:focus-visible,.mg-roi input:focus-visible,.mg-roi .cta:focus-visible{outline:2px solid var(--bordo);outline-offset:2px}
+
+/* Campos: una columna, aclaración a la derecha del título como en "Tus datos" */
+.mg-roi .fields{display:grid;gap:18px}
+.mg-roi label{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:2px 12px;font-size:15px;line-height:1.4;font-weight:600;color:var(--bordo-deep);margin-bottom:8px}
+.mg-roi .hint{font-size:13.5px;font-weight:400;color:var(--marron);opacity:.75}
+.mg-roi .input{position:relative}
+.mg-roi .input span{position:absolute;top:50%;transform:translateY(-50%);font-size:15px;color:var(--marron);opacity:.55;pointer-events:none}
+.mg-roi .input .pre{left:16px}
+.mg-roi .input .suf{right:16px}
+.mg-roi input{width:100%;font-size:17px;font-weight:500;line-height:1.4;padding:13px 16px;border-radius:var(--radius-md);border:1px solid var(--line-on-crema);background:var(--blush);color:var(--bordo-deep)}
+.mg-roi .input.has-pre input{padding-left:34px}
+.mg-roi .input.has-suf input{padding-right:38px}
+.mg-roi input:focus{border-color:var(--bordo);outline:none}
+.mg-roi input::placeholder{color:var(--marron);opacity:.4}
+.mg-roi .after{font-size:13.5px;line-height:1.5;margin-top:6px;opacity:.85}
+.mg-roi .after a{color:var(--bordo);font-weight:600}
+.mg-roi .optional{font-weight:400;font-size:14px;color:var(--bordo);opacity:.85}
+.mg-roi .note{font-size:14px;line-height:1.5;background:var(--crema);border-radius:var(--radius-md);padding:12px 14px;margin-top:18px}
+
+/* Panel de resultado: mismo que "Precio de venta sugerido" */
+.mg-roi .result{position:sticky;top:var(--mg-roi-top);background:var(--bordo);color:var(--blush);border-radius:var(--radius-lg);padding:32px;box-shadow:0 24px 48px -28px rgba(99,47,55,.55)}
+@media (max-width:600px){.mg-roi .result{padding:28px 22px}}
+.mg-roi .r-label{font-size:13.5px;line-height:1.3;font-weight:600;color:var(--rosa)}
+.mg-roi .empty{font-size:15px;line-height:1.6;margin-top:12px;opacity:.9}
+.mg-roi .empty ol{margin:10px 0 0 20px}
+.mg-roi .big{display:block;font-weight:700;font-size:clamp(40px,5vw,48px);line-height:1.05;color:var(--blush);margin-top:10px}
+.mg-roi .verdict{font-size:16px;line-height:1.45;margin-top:6px;color:var(--rosa)}
+
+.mg-roi .scale{margin-top:24px;padding-top:22px;border-top:1px solid var(--line-on-bordo)}
+.mg-roi .bar-row + .bar-row{margin-top:14px}
+.mg-roi .bar-label{display:flex;justify-content:space-between;gap:8px;font-size:15px;line-height:1.4;margin-bottom:8px;opacity:.9}
+.mg-roi .bar-label b{font-weight:600;white-space:nowrap}
+.mg-roi .bar{height:8px;border-radius:99px;background:rgba(99,47,55,.7);overflow:hidden}
+.mg-roi .bar i{display:block;height:100%;border-radius:99px;width:0;transition:width .45s ease}
+.mg-roi .bar.in i{background:var(--crema)}
+.mg-roi .bar.out i{background:var(--rosa)}
+
+.mg-roi .metrics{margin-top:22px;border-top:1px solid var(--line-on-bordo);padding-top:8px}
+.mg-roi .metric{display:flex;justify-content:space-between;gap:16px;padding:7px 0;font-size:15px;line-height:1.45}
+.mg-roi .metric dt{flex:1 1 auto;opacity:.9}
+.mg-roi .metric dd{flex:0 1 auto;max-width:55%;font-weight:600;text-align:right;white-space:nowrap}
+.mg-roi .metric dd small{display:block;white-space:normal;font-weight:400;font-size:13px;opacity:.75;min-width:14ch;margin-top:2px}
+
+.mg-roi .tip{margin-top:22px;background:var(--bordo-deep);border-radius:var(--radius-md);padding:16px 18px;font-size:14.5px;line-height:1.55}
+.mg-roi .tip b{display:block;color:var(--rosa);font-size:13.5px;font-weight:600;margin-bottom:4px}
+.mg-roi .cta{display:block;margin-top:22px;text-align:center;text-decoration:none;font-size:15px;font-weight:600;line-height:1.3;padding:16px 30px;border-radius:var(--radius-md);background:var(--crema);color:var(--bordo-deep);transition:background .15s}
+.mg-roi .cta:hover{background:var(--crema-soft)}
+.mg-roi .sign{font-size:15px;line-height:1.4;text-align:center;margin-top:16px;color:var(--rosa)}
+
+/* Barra fija en celular: muestra el resultado mientras completás, sin bajar hasta el final */
+.mg-roi .mbar{display:none}
+@media (max-width:860px){
+  .mg-roi .result{position:static;scroll-margin-top:var(--mg-roi-top)}
+  .mg-roi .mbar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:50;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bordo);color:var(--blush);border-radius:var(--radius-lg);padding:12px 12px 12px 18px;box-shadow:0 12px 32px -12px rgba(99,47,55,.6);transition:opacity .2s,transform .2s}
+  .mg-roi .mbar[hidden]{display:none!important}
+  .mg-roi .mbar-txt{font-size:13px;line-height:1.3;color:var(--rosa);font-weight:600}
+  .mg-roi .mbar-txt strong{display:block;font-family:"Baloo 2",system-ui,sans-serif;font-size:24px;line-height:1.1;color:var(--blush)}
+  .mg-roi .mbar a{flex-shrink:0;text-decoration:none;font-size:14px;font-weight:600;padding:11px 16px;border-radius:var(--radius-md);background:var(--crema);color:var(--bordo-deep)}
+}
+@media (prefers-reduced-motion:reduce){.mg-roi *{transition:none!important}}
 </style>
 </head>
 <body>
@@ -729,7 +836,7 @@
     </div>
     <div class="ebooks-grid">
       <div class="ebook-card">
-        <span class="ebook-badge">Nuevo · septiembre 2026</span>
+        <span class="ebook-badge">Septiembre 2026</span>
         <div class="ebook-cover">
           <div class="ec-top">MELGALLI</div>
           <div class="ec-title">Tu negocio, más claro</div>
@@ -739,10 +846,16 @@
         <p>Diagnóstico, objetivos de 90 días, calendario de contenido y control de ingresos y gastos, sección por sección.</p>
         <a class="btn-outline" href="https://drive.google.com/uc?export=download&id=19taphktTfYiNri-ZfiCepYb7W7A8N0Ph" target="_blank" rel="noopener">Descargar ebook</a>
       </div>
-      <div class="ebook-card upcoming">
-        <div class="up-icon">+</div>
-        <h3>Próximo ebook</h3>
-        <p>Cada mes se suma un recurso nuevo a esta sección. Seguime en Instagram para enterarte apenas esté disponible.</p>
+      <div class="ebook-card">
+        <span class="ebook-badge">Nuevo · octubre 2026</span>
+        <div class="ebook-cover">
+          <div class="ec-top">MELGALLI</div>
+          <div class="ec-title">30 días de contenido</div>
+        </div>
+        <div class="eb-meta">Ebook + planificador de contenido</div>
+        <h3>30 días de contenido sin quedarte en blanco</h3>
+        <p>30 ideas, una guía de formatos, la estructura de un buen copy y un planificador para organizar todo el mes.</p>
+        <a class="btn-outline" href="30-dias-de-contenido-melgalli.pdf" download>Descargar ebook</a>
       </div>
       <div class="ebook-card upcoming">
         <div class="up-icon">+</div>
@@ -852,6 +965,119 @@
     </div>
   </div>
 </section>
+
+<section class="mg-roi" id="calc-roi" aria-labelledby="roi-titulo">
+ <div class="mg-roi-in">
+  <div class="head">
+    <h2 id="roi-titulo">Calculá si tus acciones de marketing te hacen ganar plata</h2>
+    <p class="lead">Cargá lo que invertiste en una promo, una publicidad o una influencer, y lo que vendiste. La calculadora te muestra cuánto ganaste de verdad — no solo cuánto vendiste — y si te conviene repetirla.</p>
+  </div>
+
+  <div class="grid">
+    <div class="form" role="form" aria-label="Datos de tu acción">
+
+      <div class="group">
+        <p class="group-title">Qué acción querés medir</p>
+        <div class="chips" role="group" aria-label="Tipo de acción">
+          <button class="chip" type="button" data-type="ads" aria-pressed="true">Publicidad paga<small>Meta Ads, Google, TikTok</small></button>
+          <button class="chip" type="button" data-type="influ" aria-pressed="false">Influencer o canje<small>pago, producto o las dos</small></button>
+          <button class="chip" type="button" data-type="promo" aria-pressed="false">Promoción o descuento<small>2x1, % off, combos</small></button>
+          <button class="chip" type="button" data-type="otra" aria-pressed="false">Otra acción<small>feria, sorteo, folletos</small></button>
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="group-title">Cuánto pusiste</p>
+        <p class="group-sub">Sumá todo, también lo que no sale de la billetera.</p>
+
+        <div class="fields" data-for="ads">
+          <div><label for="roi-ads_pauta">Pauta <span class="hint">lo que pagaste en anuncios</span></label><div class="input has-pre"><span class="pre">$</span><input id="roi-ads_pauta" inputmode="decimal" placeholder="30.000"></div></div>
+          <div><label for="roi-ads_gestion">Diseño o gestión <span class="hint">si se lo pagaste a alguien</span></label><div class="input has-pre"><span class="pre">$</span><input id="roi-ads_gestion" inputmode="decimal" placeholder="0"></div></div>
+          <div><label for="roi-ads_otros">Otros gastos</label><div class="input has-pre"><span class="pre">$</span><input id="roi-ads_otros" inputmode="decimal" placeholder="0"></div></div>
+        </div>
+
+        <div class="fields" data-for="influ" hidden>
+          <div><label for="roi-inf_pago">Lo que le pagaste <span class="hint">honorarios</span></label><div class="input has-pre"><span class="pre">$</span><input id="roi-inf_pago" inputmode="decimal" placeholder="50.000"></div></div>
+          <div><label for="roi-inf_producto">Producto regalado <span class="hint">a tu costo, no a precio de venta</span></label><div class="input has-pre"><span class="pre">$</span><input id="roi-inf_producto" inputmode="decimal" placeholder="0"></div></div>
+          <div><label for="roi-inf_envio">Envío y otros gastos</label><div class="input has-pre"><span class="pre">$</span><input id="roi-inf_envio" inputmode="decimal" placeholder="0"></div></div>
+        </div>
+
+        <div class="fields" data-for="promo" hidden>
+          <div><label for="roi-pr_precio">Precio normal <span class="hint">sin el descuento</span></label><div class="input has-pre"><span class="pre">$</span><input id="roi-pr_precio" inputmode="decimal" placeholder="10.000"></div></div>
+          <div><label for="roi-pr_desc">Descuento que hiciste</label><div class="input has-suf"><input id="roi-pr_desc" inputmode="decimal" placeholder="20"><span class="suf">%</span></div></div>
+          <div><label for="roi-pr_dif">Gastos de difusión <span class="hint">cartelería, pauta, diseño</span></label><div class="input has-pre"><span class="pre">$</span><input id="roi-pr_dif" inputmode="decimal" placeholder="0"></div></div>
+        </div>
+
+        <div class="fields" data-for="otra" hidden>
+          <div><label for="roi-ot_costo">Lo que te costó la acción</label><div class="input has-pre"><span class="pre">$</span><input id="roi-ot_costo" inputmode="decimal" placeholder="20.000"></div></div>
+          <div><label for="roi-ot_otros">Otros gastos</label><div class="input has-pre"><span class="pre">$</span><input id="roi-ot_otros" inputmode="decimal" placeholder="0"></div></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <p class="group-title">Qué te volvió</p>
+        <p class="group-sub">Contá solo las ventas que llegaron por esta acción.</p>
+
+        <div class="fields" data-for="general">
+          <div><label for="roi-g_ventas">Ventas que generó <span class="hint">cantidad de compras</span></label><div class="input"><span class="pre">#</span><input id="roi-g_ventas" inputmode="numeric" placeholder="25" style="padding-left:34px"></div></div>
+          <div><label for="roi-g_ticket">Ticket promedio <span class="hint">lo que gasta cada clienta</span></label><div class="input has-pre"><span class="pre">$</span><input id="roi-g_ticket" inputmode="decimal" placeholder="12.000"></div></div>
+          <div><label for="roi-g_margen">Tu margen de ganancia <span class="hint">sobre el precio de venta</span></label><div class="input has-suf"><input id="roi-g_margen" inputmode="decimal" placeholder="40"><span class="suf">%</span></div><p class="after">¿No lo sabés? Sacalo con la <a href="#calculadora">calculadora de precio de venta</a>.</p></div>
+        </div>
+
+        <div class="fields" data-for="promo-back" hidden>
+          <div><label for="roi-pr_costo">Costo por unidad <span class="hint">insumos, materiales, envío</span></label><div class="input has-pre"><span class="pre">$</span><input id="roi-pr_costo" inputmode="decimal" placeholder="5.000"></div></div>
+          <div><label for="roi-pr_up">Unidades vendidas con la promo</label><div class="input"><span class="pre">#</span><input id="roi-pr_up" inputmode="numeric" placeholder="60" style="padding-left:34px"></div></div>
+          <div><label for="roi-pr_un">Unidades en un período normal <span class="hint">mismos días, sin promo</span></label><div class="input"><span class="pre">#</span><input id="roi-pr_un" inputmode="numeric" placeholder="35" style="padding-left:34px"></div></div>
+        </div>
+
+        <p class="note">¿Cómo saber qué ventas vinieron de la acción? Usá un código de descuento propio, un link distinto, o preguntá siempre "¿cómo nos conociste?".</p>
+      </div>
+
+      <div class="group">
+        <p class="group-title">Lo que viene después <span class="optional">opcional</span></p>
+        <p class="group-sub">Una acción puede perder en la primera venta y ganar cuando la clienta vuelve.</p>
+        <div class="fields">
+          <div><label for="roi-o_nuevas">Clientas nuevas <span class="hint">primera compra</span></label><div class="input"><span class="pre">#</span><input id="roi-o_nuevas" inputmode="numeric" placeholder="—" style="padding-left:34px"></div></div>
+          <div data-hide-promo><label for="roi-o_seg">Seguidoras nuevas <span class="hint">en Instagram</span></label><div class="input"><span class="pre">#</span><input id="roi-o_seg" inputmode="numeric" placeholder="—" style="padding-left:34px"></div></div>
+          <div data-hide-promo><label for="roi-o_vuelven">Clientas que vuelven a comprar <span class="hint">tu mejor estimación</span></label><div class="input"><span class="pre">#</span><input id="roi-o_vuelven" inputmode="numeric" placeholder="—" style="padding-left:34px"></div></div>
+          <div data-hide-promo><label for="roi-o_veces">Veces que vuelven <span class="hint">en el próximo año</span></label><div class="input"><span class="pre">#</span><input id="roi-o_veces" inputmode="numeric" placeholder="—" style="padding-left:34px"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="result" id="roi-result" aria-live="polite">
+      <p class="r-label">Retorno sobre lo invertido</p>
+      <div id="roi-empty" class="empty">
+        <p>Completá estos datos y el resultado aparece acá:</p>
+        <ol id="roi-missing"></ol>
+      </div>
+      <div id="roi-out" hidden>
+        <strong class="big" id="roi-roi"></strong>
+        <p class="verdict" id="roi-verdict"></p>
+        <div class="scale">
+          <div class="bar-row">
+            <div class="bar-label"><span>Lo que pusiste</span><b id="roi-lbl-in"></b></div>
+            <div class="bar in"><i id="roi-bar-in"></i></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label"><span>Lo que te volvió en ganancia</span><b id="roi-lbl-out"></b></div>
+            <div class="bar out"><i id="roi-bar-out"></i></div>
+          </div>
+        </div>
+        <dl class="metrics" id="roi-metrics"></dl>
+        <div class="tip"><b id="roi-tip-title"></b><span id="roi-tip"></span></div>
+        <a class="cta" href="https://melgalli.youcanbook.me/" target="_blank" rel="noopener">Coordiná una consultoría</a>
+        <p class="sign">todo empieza con una idea 🌷</p>
+      </div>
+    </aside>
+  </div>
+ </div>
+  <div class="mbar" id="roi-mbar" hidden>
+    <p class="mbar-txt">Tu retorno<strong id="roi-mbar-roi"></strong></p>
+    <a href="#roi-result">Ver resultado</a>
+  </div>
+</section>
+
 
 <section class="feed-banner">
   <div class="feed-head">
@@ -995,5 +1221,214 @@
   })();
 </script>
 
+<script>
+(function(){
+  const root = document.getElementById('calc-roi');
+  if (!root) return;
+  const $ = id => document.getElementById('roi-' + id);
+  let type = 'ads';
+
+  const num = id => {
+    const el = $(id);
+    const v = (el ? el.value : '').trim().replace(/\$/g,'').replace(/\./g,'').replace(',', '.');
+    if (v === '') return null;
+    const n = parseFloat(v);
+    return isFinite(n) ? n : null;
+  };
+  const money = n => (n < 0 ? '−$ ' : '$ ') + Math.abs(Math.round(n)).toLocaleString('es-AR');
+  const pct = n => (n >= 0 ? '' : '−') + Math.abs(Math.round(n*100)).toLocaleString('es-AR') + '%';
+  const x = n => n.toLocaleString('es-AR',{maximumFractionDigits:1});
+
+  root.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('input', calc);
+    inp.addEventListener('blur', () => {
+      const n = num(inp.id.replace('roi-',''));
+      if (n !== null && n >= 1000) inp.value = n.toLocaleString('es-AR',{maximumFractionDigits:2});
+    });
+  });
+
+  root.querySelectorAll('.chip').forEach(ch => ch.addEventListener('click', () => {
+    type = ch.dataset.type;
+    root.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === ch));
+    root.querySelectorAll('[data-for]').forEach(f => {
+      const t = f.dataset.for;
+      f.hidden = !(t === type || (t === 'general' && type !== 'promo') || (t === 'promo-back' && type === 'promo'));
+    });
+    root.querySelectorAll('[data-hide-promo]').forEach(el => el.hidden = type === 'promo');
+    calc();
+  }));
+
+  const invFields = {
+    ads: ['ads_pauta','ads_gestion','ads_otros'],
+    influ: ['inf_pago','inf_producto','inf_envio'],
+    otra: ['ot_costo','ot_otros']
+  };
+
+  const tips = {
+    win: {
+      ads: 'Es candidata a repetirse. Si subís la pauta, hacelo de a poco y volvé a medir: duplicar la inversión no siempre duplica las ventas.',
+      influ: 'Esta alianza funcionó. Proponele una segunda acción o un vínculo más largo: la segunda vez su audiencia ya te conoce.',
+      otra: 'Funcionó. Anotá qué hiciste, cuándo y con qué mensaje, así la podés repetir igual.'
+    },
+    even: {
+      ads: 'Recuperaste, pero tu tiempo también vale. Probá cambiar la imagen o el texto del anuncio antes de subir la pauta.',
+      influ: 'Quedaste hecha. Fijate si su audiencia se parece de verdad a tus clientas, o probá con una cuenta más chica y más afín.',
+      otra: 'Quedaste hecha. Pensá qué parte de la acción se puede hacer más barata o cómo sumarle un producto de mayor ticket.'
+    },
+    lose: {
+      ads: 'Antes de volver a pautar revisá a quién le mostrás el anuncio y si la oferta es clara en el primer segundo. Probá con montos chicos.',
+      influ: 'Revisá si su audiencia compra lo que vendés y si usó tu código. A veces conviene pagar por resultado: comisión por venta en vez de un fijo.',
+      otra: 'No es un fracaso, es un dato. Antes de repetirla, pensá si el problema fue el costo, el público o el mensaje.'
+    }
+  };
+
+  let ready = false;
+  function show(missing){
+    ready = missing.length === 0;
+    $('empty').hidden = ready;
+    $('out').hidden = !ready;
+    syncBar();
+    $('missing').innerHTML = missing.map(m => '<li>'+m+'</li>').join('');
+  }
+
+  function bars(inv, back){
+    const max = Math.max(inv, back, 1);
+    $('bar-in').style.width = (inv/max*100)+'%';
+    $('bar-out').style.width = (Math.max(back,0)/max*100)+'%';
+    $('lbl-in').textContent = money(inv);
+    $('lbl-out').textContent = money(Math.max(back,0));
+  }
+
+  function metrics(rows){
+    $('metrics').innerHTML = rows.filter(Boolean).map(([k,v,s]) =>
+      '<div class="metric"><dt>'+k+'</dt><dd>'+v+(s?'<small>'+s+'</small>':'')+'</dd></div>').join('');
+  }
+
+  function verdictFor(neta, inv, extra){
+    const r = neta / inv;
+    if (Math.abs(r) < 0.05) return ['even','Recuperaste lo invertido, pero no ganaste.','Quedaste hecha'];
+    if (neta > 0) return ['win', r >= 1 ? 'Esta acción te dio muy buena ganancia.' : 'Esta acción te dejó ganancia.', 'Repetila'];
+    if (extra !== null && neta + extra > 0) return ['even','En la primera venta perdiste, pero con las recompras te conviene.','Mirala a largo plazo'];
+    return ['lose','Esta acción te hizo perder plata.','Qué revisar'];
+  }
+
+  let resultVisible = false, sectionVisible = false;
+  function syncBar(){
+    const bar = $('mbar');
+    $('mbar-roi').textContent = $('roi').textContent;
+    bar.hidden = !(ready && sectionVisible && !resultVisible);
+  }
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(e => { resultVisible = e[0].isIntersecting; syncBar(); }, {threshold:.15}).observe($('result'));
+    new IntersectionObserver(e => { sectionVisible = e[0].isIntersecting; syncBar(); }).observe(root.querySelector('.form'));
+  }
+
+  function calc(){ type === 'promo' ? calcPromo() : calcGeneral(); syncBar(); }
+
+  function calcGeneral(){
+    const inv = invFields[type].map(num).reduce((a,b)=>a+(b||0),0);
+    const ventas = num('g_ventas'), ticket = num('g_ticket'), margenP = num('g_margen');
+    const missing = [];
+    if (!(inv > 0)) missing.push('Cuánto pusiste');
+    if (ventas === null) missing.push('Ventas que generó');
+    if (!(ticket > 0)) missing.push('Ticket promedio');
+    if (!(margenP > 0)) missing.push('Tu margen de ganancia');
+    show(missing); if (missing.length) return;
+
+    const m = Math.min(margenP,100)/100;
+    const fact = ventas * ticket;
+    const gan = fact * m;
+    const neta = gan - inv;
+    const roi = neta / inv;
+    const ganUnit = ticket * m;
+    const recuperar = Math.ceil(inv / ganUnit);
+
+    const nuevas = num('o_nuevas'), seg = num('o_seg'), vuelven = num('o_vuelven'), veces = num('o_veces');
+    const extra = (vuelven > 0 && veces > 0) ? vuelven * veces * ganUnit : null;
+
+    const [kind, text, tipTitle] = verdictFor(neta, inv, extra);
+    $('verdict').textContent = text;
+    $('roi').textContent = pct(roi);
+    bars(inv, gan);
+
+    const roas = fact / inv;
+    metrics([
+      ['Ganancia neta', money(neta)],
+      ['Facturaste', money(fact), 'Por cada $1 invertido facturaste $'+x(roas)+' y ganaste $'+x(gan/inv)+'.'],
+      ['Ventas para recuperar la inversión', recuperar.toLocaleString('es-AR'), ventas >= recuperar ? 'Las superaste.' : 'Te faltaron '+(recuperar-ventas).toLocaleString('es-AR')+'.'],
+      nuevas > 0 ? ['Costo por clienta nueva', money(inv/nuevas)] : null,
+      seg > 0 ? ['Costo por seguidora nueva', money(inv/seg)] : null,
+      extra !== null ? ['Ganancia contando recompras', money(neta + extra), 'Retorno de '+pct((neta+extra)/inv)+' en el año.'] : null
+    ]);
+
+    $('tip-title').textContent = tipTitle;
+    let tip = tips[kind][type];
+    if (kind === 'lose' && roas >= 1) tip = 'Ojo: facturaste más de lo que pusiste, pero tu margen no alcanzó a cubrir la inversión. ' + tip;
+    $('tip').textContent = tip;
+  }
+
+  function calcPromo(){
+    const p = num('pr_precio'), dP = num('pr_desc'), dif = num('pr_dif') || 0;
+    const c = num('pr_costo'), up = num('pr_up'), un = num('pr_un');
+    const missing = [];
+    if (!(p > 0)) missing.push('Precio normal del producto');
+    if (!(dP > 0)) missing.push('Descuento que hiciste');
+    if (c === null) missing.push('Costo por unidad');
+    if (up === null) missing.push('Unidades vendidas con la promo');
+    if (un === null) missing.push('Unidades en un período normal');
+    show(missing); if (missing.length) return;
+
+    const d = Math.min(dP,100)/100;
+    const pd = p * (1 - d);
+    const mU = pd - c;
+    const ganPromo = up * mU;
+    const ganNormal = un * (p - c);
+    const resignado = up * p * d;
+    const inv = resignado + dif;
+    const neta = ganPromo - ganNormal - dif;
+    const roi = neta / inv;
+    const nuevas = num('o_nuevas');
+
+    if (mU <= 0){
+      $('verdict').textContent = 'Con este descuento perdés plata en cada venta.';
+      $('roi').textContent = pct(roi);
+      bars(inv, neta + inv);
+      metrics([
+        ['Precio con descuento', money(pd)],
+        ['Tu costo por unidad', money(c)],
+        ['Resultado por cada venta', money(mU)],
+        ['Descuento máximo sin perder', Math.max(0, Math.floor((1 - c/p)*100))+'%', 'Y eso sin ganar nada: conviene quedarse bastante más abajo.']
+      ]);
+      $('tip-title').textContent = 'Qué revisar';
+      $('tip').textContent = 'Bajá el descuento o armá un combo que sume un producto de buen margen. Así la promo atrae sin regalar tu ganancia.';
+      return;
+    }
+
+    const recuperar = Math.ceil((ganNormal + dif) / mU);
+    const [kind, text, tipTitle] = verdictFor(neta, inv, null);
+    $('verdict').textContent = text;
+    $('roi').textContent = pct(roi);
+    bars(inv, neta + inv);
+
+    metrics([
+      ['Ganancia extra vs. un período normal', money(neta)],
+      ['Descuento que regalaste', money(resignado), 'Es parte de tu inversión, aunque no la hayas pagado.'],
+      ['Ganancia por unidad con la promo', money(mU), 'Sin promo era '+money(p - c)+'.'],
+      ['Unidades para no perder', recuperar.toLocaleString('es-AR'), up >= recuperar ? 'Las superaste.' : 'Te faltaron '+(recuperar-up).toLocaleString('es-AR')+'.'],
+      nuevas > 0 ? ['Costo por clienta nueva', money(inv/nuevas)] : null
+    ]);
+
+    const promoTips = {
+      win: 'La promo sumó ventas que no hubieras tenido. Repetila en fechas puntuales para que no se vuelva tu precio "normal".',
+      even: 'Vendiste más pero ganaste lo mismo. Probá con un descuento más chico o un combo: muchas veces el volumen se mantiene igual.',
+      lose: 'Vendiste más pero ganaste menos que en una semana normal. Achicá el descuento o limitá la promo a un producto o un día.'
+    };
+    $('tip-title').textContent = tipTitle;
+    $('tip').textContent = promoTips[kind];
+  }
+
+  calc();
+})();
+</script>
 </body>
 </html>
